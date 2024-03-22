@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-21 16:58:04
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-22 21:32:40
+ * @LastEditTime: 2024-03-23 00:44:37
  * @FilePath: \summon-war-cms-fe\api2Ts.js
  */
 import axios from 'axios'
@@ -289,7 +289,6 @@ function createApiName(apiUrl, method) {
     return apiName
   }
 }
-
 /** 转换Path */
 const convertPaths = (item) => {
   let cacheApiName = []
@@ -343,7 +342,7 @@ function convertResponse(properties) {
       ${item}: {${convertResponse(properties[item]['items']['properties'])}}
       `
     } else {
-      fileContent += `/** ${properties[item]['description']} */
+      fileContent += `/** ${properties[item]['description']} */\n
       ${item}: ${convertType(properties[item])}
       `
     }
@@ -356,14 +355,12 @@ function convertResponse1(properties) {
   const Params = Object.keys(properties)
   Params.forEach((item) => {
     if (properties[item]['type'] === 'array') {
-      fileContent += `** ${properties[item]['description']}
-    ${item}
-        {
-          ${convertResponse1(properties[item]['items']['properties'])}
-        }
+      fileContent += `    ** ${item} ${properties[item]['description']}\n
+      ${convertResponse1(properties[item]['items']['properties'])}
+        
       `
     } else {
-      fileContent += `** ${item}: ${convertType(properties[item])} ${properties[item]['description']}
+      fileContent += `     ** ${item}: ${convertType(properties[item])} ${properties[item]['description']}\n
       `
     }
   })
@@ -437,10 +434,10 @@ function convertHeaders1(headers = [], type = 'application/json') {
   if (headers.length === 0) return ''
   let fileContent = ''
   headers.forEach((item) => {
-    fileContent += `** ${item}: string
-    `
+    fileContent += `   ** ${item}: string
+   `
   })
-  fileContent += `** Content-Type: ${type}`
+  fileContent += `   ** Content-Type: ${type}`
   return fileContent
 }
 // function convertResponse(responses) {
