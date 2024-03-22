@@ -1,0 +1,7 @@
+singleQuote: true
+semi: false
+trailingComma: none
+noMultipleEmptyLines: true
+proseWrap: never
+bracketSpacing: true
+endOfLine: auto
