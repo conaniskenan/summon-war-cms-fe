@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:45
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-23 01:48:58
+ * @LastEditTime: 2024-03-23 01:52:50
  * @FilePath: \summon-war-cms-fe\src\pages\Currency\index.tsx
  */
 import { AGetList } from '@/service/currency'
@@ -13,6 +13,6 @@ const Currency: React.FC = () => {
       console.log(res)
     })
   }, [])
-  return <div>Currency134</div>
+  return <div>Currency1223134</div>
 }
 export default Currency
