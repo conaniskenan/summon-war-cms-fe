@@ -56,6 +56,17 @@
     classnames "^2.2.6"
     rc-util "^5.31.1"
 
+"@ant-design/icons@^5.3.5":
+  version "5.3.5"
+  resolved "https://registry.npmmirror.com/@ant-design/icons/-/icons-5.3.5.tgz#122d51c81a4e12d6926c0af3f38ade281ba7030c"
+  integrity sha512-Vyv/OsKz56BsKBtcRlLP6G8RGaRW43f7G5dK3XNPCaeV4YyehLVaITuNKi2YJG9hMVURkBdzdGhveNQlnKTFqw==
+  dependencies:
+    "@ant-design/colors" "^7.0.0"
+    "@ant-design/icons-svg" "^4.4.0"
+    "@babel/runtime" "^7.11.2"
+    classnames "^2.2.6"
+    rc-util "^5.31.1"
+
 "@ant-design/react-slick@~1.0.2":
   version "1.0.2"
   resolved "https://registry.npmmirror.com/@ant-design/react-slick/-/react-slick-1.0.2.tgz#241bb412aeacf7ff5d50c61fa5db66773fde6b56"
@@ -909,6 +920,11 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+amdefine@>=0.0.4:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+  integrity sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==
+
 ansi-regex@^5.0.1:
   version "5.0.1"
   resolved "https://registry.npmmirror.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
@@ -1088,6 +1104,11 @@ async-validator@^4.1.0:
   version "4.2.5"
   resolved "https://registry.npmmirror.com/async-validator/-/async-validator-4.2.5.tgz#c96ea3332a521699d0afaaceed510a54656c6339"
   integrity sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==
+
+async@~0.2.6:
+  version "0.2.10"
+  resolved "https://registry.npmmirror.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
+  integrity sha512-eAkdoKxU6/LkKDBzLpT+t6Ff5EtfSF4wx1WfJiPEEV7WNLnDaRXk0oVysiEPm262roaachGexwUv94WhSgN5TQ==
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -2450,6 +2471,13 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
+optimist@~0.3.5:
+  version "0.3.7"
+  resolved "https://registry.npmmirror.com/optimist/-/optimist-0.3.7.tgz#c90941ad59e4273328923074d2cf2e7cbc6ec0d9"
+  integrity sha512-TCx0dXQzVtSCg2OgY/bO9hjM9cV4XYx09TVK+s3+FhkjT6LovsLe+pPMzpWf+6yXK/hUizs2gUoTw3jHM0VaTQ==
+  dependencies:
+    wordwrap "~0.0.2"
+
 optionator@^0.9.3:
   version "0.9.3"
   resolved "https://registry.npmmirror.com/optionator/-/optionator-0.9.3.tgz#007397d44ed1872fdc6ed31360190f81814e2c64"
@@ -3008,6 +3036,14 @@ regexp.prototype.flags@^1.5.2:
     es-errors "^1.3.0"
     set-function-name "^2.0.1"
 
+require@^2.4.20:
+  version "2.4.20"
+  resolved "https://registry.npmmirror.com/require/-/require-2.4.20.tgz#66cb6baaabb65de8a71d793f5c65fd184f3798b6"
+  integrity sha512-7eop5rvh38qhQQQOoUyf68meVIcxT2yFySNywTbxoEECgkX4KDqqDRaEszfvFnuB3fuZVjDdJZ1TI/Esr16RRA==
+  dependencies:
+    std "0.1.40"
+    uglify-js "2.3.0"
+
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmmirror.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
@@ -3181,6 +3217,18 @@ source-map@^0.7.3:
   version "0.7.4"
   resolved "https://registry.npmmirror.com/source-map/-/source-map-0.7.4.tgz#a9bbe705c9d8846f4e08ff6765acf0f1b0898656"
   integrity sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==
+
+source-map@~0.1.7:
+  version "0.1.43"
+  resolved "https://registry.npmmirror.com/source-map/-/source-map-0.1.43.tgz#c24bc146ca517c1471f5dacbe2571b2b7f9e3346"
+  integrity sha512-VtCvB9SIQhk3aF6h+N85EaqIaBFIAfZ9Cu+NJHHVvc8BbEcnvDcFw6sqQ2dQrT6SlOrZq3tIvyD9+EGq/lJryQ==
+  dependencies:
+    amdefine ">=0.0.4"
+
+std@0.1.40:
+  version "0.1.40"
+  resolved "https://registry.npmmirror.com/std/-/std-0.1.40.tgz#3678a5f65094d9e1b6b5e26edbfc0212b8342b71"
+  integrity sha512-wUf57hkDGCoVShrhPA8Q7lAg2Qosk+FaMlECmAsr1A4/rL2NRXFHQGBcgMUFKVkPEemJFW9gzjCQisRty14ohg==
 
 string-convert@^0.2.0:
   version "0.2.1"
@@ -3378,6 +3426,15 @@ typescript@^5.3.3:
   resolved "https://registry.npmmirror.com/typescript/-/typescript-5.4.3.tgz#5c6fedd4c87bee01cd7a528a30145521f8e0feff"
   integrity sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==
 
+uglify-js@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmmirror.com/uglify-js/-/uglify-js-2.3.0.tgz#2cdec16d378a8a2b6ecfb6989784cf8b7ae5491f"
+  integrity sha512-AQvbxRKdaQeYADywQaao0k8Tj+7NGEVTne6xwgX1yQpv/G8b0CKdIw70HkCptwfvNGDsVe+0Bng3U9hfWbxxfg==
+  dependencies:
+    async "~0.2.6"
+    optimist "~0.3.5"
+    source-map "~0.1.7"
+
 unbox-primitive@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/unbox-primitive/-/unbox-primitive-1.0.2.tgz#29032021057d5e6cdbd08c5129c226dff8ed6f9e"
@@ -3502,6 +3559,11 @@ windicss@^3.5.6:
   version "3.5.6"
   resolved "https://registry.npmmirror.com/windicss/-/windicss-3.5.6.tgz#30a34da76894d952a96c9a1921f2e91e13932183"
   integrity sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==
+
+wordwrap@~0.0.2:
+  version "0.0.3"
+  resolved "https://registry.npmmirror.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
+  integrity sha512-1tMA907+V4QmxV7dbRvb4/8MaRALK6q9Abid3ndMYnbyo8piisCmeONVqVSXqQA3KaP4SLt5b7ud6E2sqP8TFw==
 
 wrappy@1:
   version "1.0.2"

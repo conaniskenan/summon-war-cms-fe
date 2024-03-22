@@ -8,7 +8,8 @@ const instance = axios.create({
 //请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    console.log(config)
+    //添加X-CAPTCHA-TICKET
+    config.headers['X-CAPTCHA-TICKET'] = ''
     return config
   },
   (error) => {

@@ -1,27 +1,25 @@
-import SuspenseLazy from '@/components/SuspenseLazy'
-import { RouteObject } from 'react-router-dom'
-
-const Login = SuspenseLazy(() => import('@/view/Login'))
-
-const routes: RouteObject[] = [
+import React from 'react'
+const Home = React.lazy(() => import('@/pages/Home'))
+const NotFound = React.lazy(() => import('@/pages/404'))
+const Version = React.lazy(() => import('@/pages/Version'))
+const Currency = React.lazy(() => import('@/pages/Currency'))
+const routes = [
   {
     path: '/',
-    element: Login
+    element: <Home />
   },
   {
-    path: '/login',
-    element: Login
+    path: '/version',
+    element: <Version />
+  },
+  {
+    path: '/currency',
+    element: <Currency />
+  },
+  {
+    path: '*',
+    element: <NotFound />
   }
 ]
-export const routeFlatten = (routes: RouteObject[]): RouteObject[] => {
-  const result: RouteObject[] = []
-  routes.forEach((route) => {
-    if (route.children) {
-      result.push(...routeFlatten(route.children))
-    } else {
-      result.push(route)
-    }
-  })
-  return result
-}
-export default routeFlatten(routes)
+
+export default routes

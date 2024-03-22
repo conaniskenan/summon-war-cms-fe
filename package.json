@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "path": "^0.12.7"
+    "@ant-design/icons": "^5.3.5",
+    "path": "^0.12.7",
+    "require": "^2.4.20"
   },
   "devDependencies": {
     "@types/node": "^18.19.9",

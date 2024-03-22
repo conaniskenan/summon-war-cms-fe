@@ -1,16 +1,17 @@
-import "./assets/normalize.css"
-import "virtual:windi.css"
-import { createRoot } from "react-dom/client"
-import { HashRouter } from "react-router-dom"
-import App from "./App"
-import { StoresProvider, stores } from "@/store"
-const rootElement = document.getElementById("root")
-const root = createRoot(rootElement as HTMLDivElement)
+import './assets/normalize.css'
+import 'virtual:windi.css'
+import { Suspense } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import { StoresProvider, stores } from './store'
 
+const domContainer: HTMLElement =
+  document.getElementById('root') || document.createElement('div')
+const root = createRoot(domContainer)
 root.render(
-  <HashRouter>
+  <Suspense>
     <StoresProvider value={stores}>
-      <App />
+      <App></App>
     </StoresProvider>
-  </HashRouter>
+  </Suspense>
 )
