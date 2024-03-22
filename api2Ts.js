@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-21 16:58:04
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-22 18:06:19
+ * @LastEditTime: 2024-03-22 21:32:40
  * @FilePath: \summon-war-cms-fe\api2Ts.js
  */
 import axios from 'axios'
@@ -13,7 +13,7 @@ const httpsAgent = new https.Agent({
 })
 axios.defaults.httpsAgent = httpsAgent
 const output = './src/service/currency'
-//https://apifox.com/apidoc/shared-298df24a-8180-4b00-9479-a06337f9a081 user
+//https://apifox.com/apidoc/shared-298df24a-8180-4b00-9479-a06337f9a081  user
 //https://apifox.com/apidoc/shared-32364896-95f9-44d8-8c89-fc8628de9b9b version
 //https://apifox.com/apidoc/shared-43e9b7d8-4e6b-4d76-b2b4-617844cbb844 currency
 const share_id = '43e9b7d8-4e6b-4d76-b2b4-617844cbb844'
