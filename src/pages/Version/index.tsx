@@ -2,9 +2,10 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:15
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-22 15:05:15
+ * @LastEditTime: 2024-03-22 21:05:53
  * @FilePath: \summon-war-cms-fe\src\pages\Version\index.tsx
  */
+
 const Version: React.FC = () => {
   return <div>Version</div>
 }
