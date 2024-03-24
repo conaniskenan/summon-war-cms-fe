@@ -76,6 +76,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
           {
             required: true,
             message: `${title} is required.`
+          },
+          {
+            whitespace: true,
+            message: `${title} is required.`
           }
         ]}
       >
