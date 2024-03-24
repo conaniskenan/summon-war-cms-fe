@@ -9,12 +9,17 @@ const routes = [
     element: <Home />
   },
   {
-    path: '/version',
-    element: <Version />
-  },
-  {
-    path: '/currency',
-    element: <Currency />
+    path: '/warehouse',
+    children: [
+      {
+        path: '/warehouse/version',
+        element: <Version />
+      },
+      {
+        path: '/warehouse/currency',
+        element: <Currency />
+      }
+    ]
   },
   {
     path: '*',

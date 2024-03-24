@@ -1,5 +1,6 @@
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import { notification } from 'antd'
 //封装一个通用的ts版本的axios请求 包括请求拦截器和响应拦截器
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL as string,
@@ -23,7 +24,7 @@ instance.interceptors.response.use(
     return res
   },
   (err) => {
-    console.log(err)
+    // console.log(err)
     const code = err.response?.data?.code
     interface ErrParams {
       status: number
@@ -37,14 +38,19 @@ instance.interceptors.response.use(
       text: err.response?.data?.text,
       needVertify: false
     }
-    if (err.response?.status === 403) {
-      if (code === 65537) {
-        errParams.needVertify = true
-      }
-      if (code === 65538) {
-        localStorage.removeItem('SUMMON_WAR_SESSION')
-      }
-    }
+    notification.error({
+      message: '错误信息',
+      description: err.response ? err.response.data.text : err.message,
+      duration: 2
+    })
+    // if (err.response?.status === 403) {
+    //   if (code === 65537) {
+    //     errParams.needVertify = true
+    //   }
+    //   if (code === 65538) {
+    //     localStorage.removeItem('SUMMON_WAR_SESSION')
+    //   }
+    // }
     return Promise.reject(errParams)
   }
 )

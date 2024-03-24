@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-21 16:58:04
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-23 00:44:37
+ * @LastEditTime: 2024-03-24 17:39:01
  * @FilePath: \summon-war-cms-fe\api2Ts.js
  */
 import axios from 'axios'
@@ -12,11 +12,12 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false
 })
 axios.defaults.httpsAgent = httpsAgent
-const output = './src/service/currency'
+const output = './src/service/version'
+const initApiName = 'Version'
 //https://apifox.com/apidoc/shared-298df24a-8180-4b00-9479-a06337f9a081  user
 //https://apifox.com/apidoc/shared-32364896-95f9-44d8-8c89-fc8628de9b9b version
 //https://apifox.com/apidoc/shared-43e9b7d8-4e6b-4d76-b2b4-617844cbb844 currency
-const share_id = '43e9b7d8-4e6b-4d76-b2b4-617844cbb844'
+const share_id = '32364896-95f9-44d8-8c89-fc8628de9b9b'
 
 // 清一下目录
 existsSync(`${output}`) && rmdirSync(`./${output}`, { recursive: true })
@@ -276,14 +277,14 @@ function createApiName(apiUrl, method) {
   name += routeParam ? '_' + routeParam : ''
 
   let apiName =
-    'A' + firstToLocaleUpperCase(method) + firstToLocaleUpperCase(name)
+    method + initApiName + firstToLocaleUpperCase(name)
 
   return (cacheApiName = []) => {
     if (cacheApiName.includes(apiName)) {
       name =
         firstToLocaleUpperCase(urlBlock[urlBlock.length - 2].replace('/', '')) +
         firstToLocaleUpperCase(urlBlock[urlBlock.length - 1].replace('/', ''))
-      apiName = 'A' + firstToLocaleUpperCase(method) + name
+      apiName = method + initApiName + firstToLocaleUpperCase(name)
     }
     cacheApiName.push(apiName)
     return apiName
@@ -293,6 +294,7 @@ function createApiName(apiUrl, method) {
 const convertPaths = (item) => {
   let cacheApiName = []
   const getApiName = createApiName(item.path, item.method)
+  const apiName = firstToLocaleUpperCase(getApiName(cacheApiName))
   let pathsFileCotent = `
     /**
     ** 接口名称: ${item.name}
@@ -302,24 +304,24 @@ const convertPaths = (item) => {
     ** 请求头:
     ${convertHeaders1(item.commonParameters.header, item.requestBody.type)}
     ** 请求参数:
-    ${convertParameters1(
-      item.requestBody?.jsonSchema?.properties,
-      item.requestBody?.jsonSchema?.required
-    )}
+    ${item === 'post' ? convertPostParameters1(
+    item.requestBody?.jsonSchema?.properties,
+    item.requestBody?.jsonSchema?.required
+  ) : convertGetParameters1(item.parameters?.query)}
     ** 响应字段:
     ${convertResponse1(item.responses[0].jsonSchema.properties)}
     */
-    namespace ${getApiName(cacheApiName)} {
+    namespace ${apiName} {
       /** 请求头 */
       interface Headers {
         ${convertHeaders(item.commonParameters.header)}
       }
       /** 请求 */
       interface Request {
-        ${convertParameters(
-          item.requestBody?.jsonSchema?.properties,
-          item.requestBody?.jsonSchema?.required
-        )}
+        ${item.method === 'post' ? convertPostParameters(
+    item.requestBody?.jsonSchema?.properties,
+    item.requestBody?.jsonSchema?.required
+  ) : convertGetParameters(item.parameters?.query)}
       }
       /** 响应 */
       interface Response  {
@@ -339,7 +341,7 @@ function convertResponse(properties) {
   Params.forEach((item) => {
     if (properties[item]['type'] === 'array') {
       fileContent += `/** ${properties[item]['description']} */
-      ${item}: {${convertResponse(properties[item]['items']['properties'])}}
+      ${item}: {${convertResponse(properties[item]['items']['properties'])}}[]
       `
     } else {
       fileContent += `/** ${properties[item]['description']} */\n
@@ -349,25 +351,30 @@ function convertResponse(properties) {
   })
   return fileContent
 }
-function convertResponse1(properties) {
+function convertResponse1(properties, isArray = false) {
   if (!properties || Object.keys(properties).length == 0) return ''
   let fileContent = ''
   const Params = Object.keys(properties)
   Params.forEach((item) => {
     if (properties[item]['type'] === 'array') {
       fileContent += `    ** ${item} ${properties[item]['description']}\n
-      ${convertResponse1(properties[item]['items']['properties'])}
-        
-      `
+   ${convertResponse1(properties[item]['items']['properties'], true)}
+  `
     } else {
-      fileContent += `     ** ${item}: ${convertType(properties[item])} ${properties[item]['description']}\n
-      `
+      if (!isArray) {
+        fileContent += `    ** ${item}: ${convertType(properties[item])} ${properties[item]['description']}\n
+   `
+      }
+      else {
+        fileContent += `       ** ${item}: ${convertType(properties[item])} ${properties[item]['description']}\n
+   `
+      }
     }
   })
   return fileContent
 }
 /** 转换parameters参数 */
-function convertParameters(properties, required = []) {
+function convertPostParameters(properties, required = []) {
   if (!properties || Object.keys(properties).length == 0) return ''
   let fileContent = ''
   // 处理path
@@ -387,7 +394,37 @@ function convertParameters(properties, required = []) {
   })
   return fileContent
 }
-function convertParameters1(properties, required = []) {
+function convertGetParameters(query = []) {
+  let fileContent = ''
+  query.forEach((item) => {
+    if (item.required) {
+      fileContent += `/** ${item.name} ${item.description} */
+      ${item.name}: ${convertType(item)}
+      `
+    }
+    else {
+      fileContent += `/** ${item.name} ${item.description} */
+      ${item.name}?: ${convertType(item)}
+      `
+    }
+  })
+  return fileContent
+}
+function convertGetParameters1(query = []) {
+  let fileContent = ''
+  query.forEach((item) => {
+    if (item.required) {
+      fileContent += `   ** ${item.name}: ${convertType(item)} ${item.description}
+      `
+    }
+    else {
+      fileContent += `   ** ${item.name}?: ${convertType(item)} ${item.description}
+      `
+    }
+  })
+  return fileContent
+}
+function convertPostParameters1(properties, required = []) {
   if (!properties || Object.keys(properties).length == 0) return ''
   let fileContent = ''
   // 处理path
@@ -396,15 +433,15 @@ function convertParameters1(properties, required = []) {
     const description =
       properties[item]['description'] || properties[item]['title'] || ''
     if (required.includes(item)) {
-      fileContent += `** ${item}: ${convertType(
+      fileContent += `   ** ${item}: ${convertType(
         properties[item]
       )} ${description}
-    `
+   `
     } else {
-      fileContent += `** ${item}?: ${convertType(
+      fileContent += `   ** ${item}?: ${convertType(
         properties[item]
       )}  ${description}
-    `
+   `
     }
   })
   return fileContent
@@ -457,7 +494,8 @@ function formatSchemaName(str) {
 function convertServices(item) {
   let cacheApiName = []
   const getApiName = createApiName(item.path, item.method)
-  const apiName = getApiName(cacheApiName)
+  const funcName = getApiName(cacheApiName)
+  const apiName = firstToLocaleUpperCase(funcName)
   const servicesFileCotent = `
   /**
    ** 接口名称: ${item.name}
@@ -467,21 +505,20 @@ function convertServices(item) {
    ** 请求头:
    ${convertHeaders1(item.commonParameters.header, item.requestBody.type)}
    ** 请求参数:
-   ${convertParameters1(
-     item.requestBody?.jsonSchema?.properties,
-     item.requestBody?.jsonSchema?.required
-   )}
+   ${item.method === 'post' ? convertPostParameters1(
+    item.requestBody?.jsonSchema?.properties,
+    item.requestBody?.jsonSchema?.required
+  ) : convertGetParameters1(item.parameters?.query)}
    ** 响应字段:
    ${convertResponse1(item.responses[0].jsonSchema.properties)}
    */
-export const ${apiName} = (params: Api.Paths.${apiName}.Request,config={}) => {
+export const ${funcName} = (params: Api.Paths.${apiName}.Request,config={}) => {
   return request<Api.Paths.${apiName}.Response>({
     url: \`${item.path.replace(/[{]/g, '${params.')}\`,
     method: "${item.method.toUpperCase()}",
-    ${
-      ['GET', 'DELETE'].includes(item.method.toUpperCase())
-        ? 'params,'
-        : 'data: params,'
+    ${['GET', 'DELETE'].includes(item.method.toUpperCase())
+      ? 'params,'
+      : 'data: params,'
     }
     ...config
   });
