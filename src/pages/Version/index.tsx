@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:15
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-24 20:32:58
+ * @LastEditTime: 2024-03-26 09:19:57
  * @FilePath: \summon-war-cms-fe\src\pages\Version\index.tsx
  */
 
@@ -17,7 +17,6 @@ import React from 'react'
 import { Button, notification } from 'antd'
 import EditTable from '@/components/EditTable'
 import { useRequest } from 'ahooks'
-import { DeleteOutlined } from '@ant-design/icons'
 const Version: React.FC = () => {
   const [refresh, setRefresh] = useState(0)
   const [list, setList] = useState<Api.Paths.GetVersionList.Response['list']>(

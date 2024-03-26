@@ -2,7 +2,7 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:45
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-24 17:40:46
+ * @LastEditTime: 2024-03-25 09:44:09
  * @FilePath: \summon-war-cms-fe\src\pages\Currency\index.tsx
  */
 import { getCurrencyList } from '@/service/currency'
