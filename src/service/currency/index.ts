@@ -1,7 +1,9 @@
+
 /** Tip: 需要手动引入 request 函数 */
 import request from '@/utils/request'
 
-/**
+
+  /**
    ** 接口名称: 获取货币列表
    ** 请求方式: get
    ** 接口地址: /warehouse/currency/list
@@ -35,19 +37,16 @@ import request from '@/utils/request'
    
   
    */
-export const getCurrencyList = (
-  params: Api.Paths.GetCurrencyList.Request,
-  config = {}
-) => {
+export const getCurrencyList = (params: Api.Paths.GetCurrencyList.Request,config={}) => {
   return request<Api.Paths.GetCurrencyList.Response>({
     url: `/warehouse/currency/list`,
-    method: 'GET',
+    method: "GET",
     params,
     ...config
-  })
+  });
 }
-
-/**
+        
+  /**
    ** 接口名称: 修改货币
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/modify
@@ -71,19 +70,16 @@ export const getCurrencyList = (
 
    
    */
-export const postCurrencyModify = (
-  params: Api.Paths.PostCurrencyModify.Request,
-  config = {}
-) => {
+export const postCurrencyModify = (params: Api.Paths.PostCurrencyModify.Request,config={}) => {
   return request<Api.Paths.PostCurrencyModify.Response>({
     url: `/warehouse/currency/modify`,
-    method: 'POST',
+    method: "POST",
     data: params,
     ...config
-  })
+  });
 }
-
-/**
+        
+  /**
    ** 接口名称: 添加货币
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/insert
@@ -107,19 +103,16 @@ export const postCurrencyModify = (
 
    
    */
-export const postCurrencyInsert = (
-  params: Api.Paths.PostCurrencyInsert.Request,
-  config = {}
-) => {
+export const postCurrencyInsert = (params: Api.Paths.PostCurrencyInsert.Request,config={}) => {
   return request<Api.Paths.PostCurrencyInsert.Response>({
     url: `/warehouse/currency/insert`,
-    method: 'POST',
+    method: "POST",
     data: params,
     ...config
-  })
+  });
 }
-
-/**
+        
+  /**
    ** 接口名称: 删除货币
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/delete
@@ -142,19 +135,16 @@ export const postCurrencyInsert = (
 
    
    */
-export const postCurrencyDelete = (
-  params: Api.Paths.PostCurrencyDelete.Request,
-  config = {}
-) => {
+export const postCurrencyDelete = (params: Api.Paths.PostCurrencyDelete.Request,config={}) => {
   return request<Api.Paths.PostCurrencyDelete.Response>({
     url: `/warehouse/currency/delete`,
-    method: 'POST',
+    method: "POST",
     data: params,
     ...config
-  })
+  });
 }
-
-/**
+        
+  /**
    ** 接口名称: 修改发布状态
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/modify/release
@@ -178,19 +168,16 @@ export const postCurrencyDelete = (
 
    
    */
-export const postCurrencyRelease = (
-  params: Api.Paths.PostCurrencyRelease.Request,
-  config = {}
-) => {
+export const postCurrencyRelease = (params: Api.Paths.PostCurrencyRelease.Request,config={}) => {
   return request<Api.Paths.PostCurrencyRelease.Response>({
     url: `/warehouse/currency/modify/release`,
-    method: 'POST',
+    method: "POST",
     data: params,
     ...config
-  })
+  });
 }
-
-/**
+        
+  /**
    ** 接口名称: 修改默认状态
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/modify/default
@@ -214,14 +201,12 @@ export const postCurrencyRelease = (
 
    
    */
-export const postCurrencyDefault = (
-  params: Api.Paths.PostCurrencyDefault.Request,
-  config = {}
-) => {
+export const postCurrencyDefault = (params: Api.Paths.PostCurrencyDefault.Request,config={}) => {
   return request<Api.Paths.PostCurrencyDefault.Response>({
     url: `/warehouse/currency/modify/default`,
-    method: 'POST',
+    method: "POST",
     data: params,
     ...config
-  })
+  });
 }
+        

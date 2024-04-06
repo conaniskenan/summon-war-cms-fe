@@ -2,8 +2,8 @@
  * @Author: hypocrisy
  * @Date: 2024-03-21 16:58:04
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-03-24 17:39:01
- * @FilePath: \summon-war-cms-fe\api2Ts.js
+ * @LastEditTime: 2024-04-04 17:46:58
+ * @FilePath: /summon-war-cms-fe/api2Ts.js
  */
 import axios from 'axios'
 import https from 'https'
@@ -12,12 +12,15 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false
 })
 axios.defaults.httpsAgent = httpsAgent
-const output = './src/service/version'
-const initApiName = 'Version'
+const output = './src/service/frame'
+const initApiName = 'Frame'
 //https://apifox.com/apidoc/shared-298df24a-8180-4b00-9479-a06337f9a081  user
 //https://apifox.com/apidoc/shared-32364896-95f9-44d8-8c89-fc8628de9b9b version
 //https://apifox.com/apidoc/shared-43e9b7d8-4e6b-4d76-b2b4-617844cbb844 currency
-const share_id = '32364896-95f9-44d8-8c89-fc8628de9b9b'
+//https://apifox.com/apidoc/shared-c8d430ca-6419-4576-b750-8ffb6c1d3332 avatar
+//https://apifox.com/apidoc/shared-4178c3a0-3543-4152-b093-f953acde27bd race
+//https://apifox.com/apidoc/shared-a127f973-798d-4d43-bb72-f877019ec669 frame
+const share_id = 'a127f973-798d-4d43-bb72-f877019ec669'
 
 // 清一下目录
 existsSync(`${output}`) && rmdirSync(`./${output}`, { recursive: true })
