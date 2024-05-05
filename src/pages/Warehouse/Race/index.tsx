@@ -2,64 +2,98 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:45
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-04-06 21:08:39
- * @FilePath: /summon-war-cms-fe/src/pages/Race/index.tsx
+ * @LastEditTime: 2024-05-05 18:58:08
+ * @FilePath: \summon-war-cms-fe\src\pages\Warehouse\Race\index.tsx
  */
-import {
-  getRaceList,
-  postRaceModify,
-  postRaceDelete,
-  postRaceInsert,
-  postRaceDefault,
-  postRaceRelease
-} from '@/service/race'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRequest } from 'ahooks'
 import EditTable from '@/components/EditTable'
 import { Button, Form, Input, Modal, Radio, Select, notification } from 'antd'
-
+import { Service } from '@/api'
+//通过PostRaceList方法获取 返回值是一个promise 拿到promise的返回值
+type RaceListProps = ReturnType<
+  typeof Service.postWarehouseRaceList
+> extends Promise<infer T>
+  ? T
+  : never
+type VersionListProps = ReturnType<
+  typeof Service.getWarehouseVersionList
+> extends Promise<infer T>
+  ? T
+  : never
 const Race: React.FC = () => {
+  const [list, setList] = useState<RaceListProps['list']>([])
   const [id, setId] = useState<number>(0)
-  const [list, setList] = useState<Api.Paths.GetRaceList.Response['list']>([])
   const [visible, setVisible] = useState(false)
   const [releaseVisible, setReleaseVisible] = useState(false)
   const [defaultVisible, setDefaultVisible] = useState(false)
-
   const [form] = Form.useForm()
+  const [searchFrom] = Form.useForm()
   const [releaseForm] = Form.useForm()
   const [defaultForm] = Form.useForm()
   const [refresh, setRefresh] = useState(0)
-  const { run: getRaceListRun } = useRequest(getRaceList, {
-    manual: true,
-    onSuccess: (res) => {
-      setList(res.list)
+  const [total, setTotal] = useState(0)
+  const [versionList, setVersionList] = useState<VersionListProps['list']>([])
+  const searchRef = useRef({
+    offset: 0,
+    limit: 50,
+    filter: {
+      name: '',
+      version_id: 0,
+      default: -1,
+      release: -1
     }
   })
-  const { run: postRaceModifyRun } = useRequest(postRaceModify, {
-    manual: true,
-    onSuccess: () => {
-      setRefresh((prev) => prev + 1)
-      notification.success({
-        message: '',
-        description: '种族名称修改成功',
-        duration: 2
-      })
-    }
-  })
-  const { run: postRaceDeleteRun } = useRequest(postRaceDelete, {
-    manual: true,
-    onSuccess: () => {
-      setRefresh((prev) => prev + 1)
-      notification.success({
-        message: '',
-        description: '种族删除成功',
-        duration: 2
-      })
-    }
-  })
-  const { run: postRaceInsertRun, loading: postRaceInsertLoading } = useRequest(
-    postRaceInsert,
+  const { run: getWarehouseVersionListRun } = useRequest(
+    Service.getWarehouseVersionList,
     {
+      manual: true,
+      onSuccess: (res) => {
+        setVersionList(res.list)
+      }
+    }
+  )
+  const { run: postRaceListRun } = useRequest(
+    Service.postWarehouseRaceList,
+    {
+      manual: true,
+      debounceWait: 500,
+      onSuccess: (res) => {
+        setList(res.list)
+        setTotal(res.total)
+      }
+    }
+  )
+  const { run: postRaceModifyRun } = useRequest(
+    Service.postWarehouseRaceModify,
+    {
+      manual: true,
+      onSuccess: () => {
+        setRefresh((prev) => prev + 1)
+        notification.success({
+          message: '',
+          description: '种族名称修改成功',
+          duration: 2
+        })
+      }
+    }
+  )
+  const { run: postRaceDeleteRun } = useRequest(
+    Service.postWarehouseRaceDelete,
+    {
+      manual: true,
+      onSuccess: () => {
+        setRefresh((prev) => prev + 1)
+        notification.success({
+          message: '',
+          description: '种族删除成功',
+          duration: 2
+        })
+      }
+    }
+  )
+  const { run: postRaceInsertRun, loading: postRaceInsertLoading } =
+    useRequest(Service.postWarehouseRaceInsert, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -71,10 +105,9 @@ const Race: React.FC = () => {
         })
         form.resetFields()
       }
-    }
-  )
+    })
   const { run: postRaceDefaultRun, loading: postRaceDefaultLoading } =
-    useRequest(postRaceDefault, {
+    useRequest(Service.postWarehouseRaceModifyDefault, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -87,7 +120,7 @@ const Race: React.FC = () => {
       }
     })
   const { run: postRaceReleaseRun, loading: postRaceReleaseLoading } =
-    useRequest(postRaceRelease, {
+    useRequest(Service.postWarehouseRaceModifyRelease, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -99,10 +132,7 @@ const Race: React.FC = () => {
         })
       }
     })
-  const handleSave = (
-    row: Api.Paths.GetRaceList.Response['list'][0],
-    preRow: Api.Paths.GetRaceList.Response['list'][0]
-  ) => {
+  const handleSave = (row: any, preRow: any) => {
     if (row.name === preRow.name) {
       return
     }
@@ -117,7 +147,7 @@ const Race: React.FC = () => {
         return item
       })
     })
-    postRaceModifyRun({
+    postRaceModifyRun('', '', {
       id: row.id,
       name: row.name
     })
@@ -168,10 +198,7 @@ const Race: React.FC = () => {
       dataIndex: 'operation',
       align: 'center',
       width: 400,
-      render: (
-        _text: string,
-        record: Api.Paths.GetRaceList.Response['list'][0]
-      ) => {
+      render: (_text: string, record: any) => {
         return (
           <div>
             <Button
@@ -200,7 +227,9 @@ const Race: React.FC = () => {
               danger
               type="link"
               onClick={() => {
-                postRaceDeleteRun({ id: record.id })
+                postRaceDeleteRun('', '', {
+                  id: record.id
+                })
               }}
               //只有release为0的才能删除
               disabled={record.release !== 0}
@@ -213,11 +242,12 @@ const Race: React.FC = () => {
     }
   ]
   useEffect(() => {
-    getRaceListRun({ version_id: 0 })
+    getWarehouseVersionListRun('', '')
+    postRaceListRun('', '', searchRef.current)
   }, [refresh])
 
   return (
-    <div>
+    <div className="relative">
       <Modal
         destroyOnClose={true}
         open={visible}
@@ -227,7 +257,7 @@ const Race: React.FC = () => {
         }}
         onOk={() => {
           form.validateFields().then((values) => {
-            postRaceInsertRun(values)
+            postRaceInsertRun('', '', values)
           })
         }}
         confirmLoading={postRaceInsertLoading}
@@ -253,14 +283,8 @@ const Race: React.FC = () => {
           >
             <Input placeholder="输入种族名称" />
           </Form.Item>
-          <Form.Item
-            label="默认状态"
-            name="default"
-            required
-            rules={[{ required: true, message: '请输入默认状态' }]}
-            initialValue={1}
-          >
-            <Radio.Group defaultValue={1}>
+          <Form.Item label="默认状态" name="default" required initialValue={1}>
+            <Radio.Group>
               <Radio value={1}>正常</Radio>
               <Radio value={2}>隐藏</Radio>
             </Radio.Group>
@@ -276,7 +300,7 @@ const Race: React.FC = () => {
         }}
         onOk={() => {
           releaseForm.validateFields().then((values) => {
-            postRaceReleaseRun({ ...values, id })
+            postRaceReleaseRun('', '', { ...values, id })
           })
         }}
         confirmLoading={postRaceReleaseLoading}
@@ -287,6 +311,7 @@ const Race: React.FC = () => {
         title="修改发布状态"
       >
         <Form
+          name="releaseForm"
           form={releaseForm}
           style={{
             marginTop: '50px',
@@ -297,7 +322,7 @@ const Race: React.FC = () => {
         >
           <Form.Item label="发布状态" name="release" required initialValue={1}>
             <Select>
-              {/* <Select.Option value={0}>未发布</Select.Option> */}
+              <Select.Option value={0}>未发布</Select.Option>
               <Select.Option value={1}>已发布</Select.Option>
               <Select.Option value={2}>隐藏</Select.Option>
             </Select>
@@ -313,7 +338,7 @@ const Race: React.FC = () => {
         }}
         onOk={() => {
           defaultForm.validateFields().then((values) => {
-            postRaceDefaultRun({ ...values, id })
+            postRaceDefaultRun('', '', { ...values, id })
           })
         }}
         confirmLoading={postRaceDefaultLoading}
@@ -324,6 +349,7 @@ const Race: React.FC = () => {
         title="修改默认状态"
       >
         <Form
+          name="defaultForm"
           form={defaultForm}
           style={{
             marginTop: '50px',
@@ -341,16 +367,97 @@ const Race: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <Button
-        type="primary"
-        className="mb-3 mr-4"
-        onClick={() => {
-          setVisible(true)
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
         }}
       >
-        添加种族
-      </Button>
-      <EditTable defaultColumns={columns} list={list} handleSave={handleSave} />
+        <Form
+          layout="inline"
+          name="searchFrom"
+          form={searchFrom}
+          labelCol={{ flex: 100 }}
+          wrapperCol={{ flex: 300 }}
+          style={{ marginBottom: '20px', width: '100%' }}
+          onValuesChange={() => {
+            searchFrom.validateFields().then((values) => {
+              searchRef.current = {
+                ...searchRef.current,
+                filter: {
+                  ...searchRef.current.filter,
+                  ...values
+                }
+              }
+              postRaceListRun('', '', searchRef.current)
+            })
+          }}
+        >
+          <Form.Item label="种族名称" name="name" initialValue={''}>
+            <Input placeholder="输入种族名称" />
+          </Form.Item>
+          <Form.Item label="被创建版本" name="version_id" initialValue={0}>
+            <Select style={{ minWidth: 100 }} placeholder="选择版本">
+              <Select.Option value={0}>全部</Select.Option>
+              {versionList.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="默认状态" name="default" initialValue={-1}>
+            <Select style={{ minWidth: 100 }}>
+              <Select.Option value={-1}>全部</Select.Option>
+              <Select.Option value={1}>正常</Select.Option>
+              <Select.Option value={2}>隐藏</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="发布状态" name="release" initialValue={-1}>
+            <Select style={{ minWidth: 100 }}>
+              <Select.Option value={-1}>全部</Select.Option>
+              <Select.Option value={0}>未发布</Select.Option>
+              <Select.Option value={1}>已发布</Select.Option>
+              <Select.Option value={2}>隐藏</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+        <Button
+          type="primary"
+          className="mb-3 mr-4"
+          onClick={() => {
+            setVisible(true)
+          }}
+        >
+          添加种族
+        </Button>
+      </div>
+      <div
+        style={{
+          height: 'calc(100vh - 240px)',
+          overflow: 'auto'
+        }}
+      >
+        <EditTable
+          defaultColumns={columns}
+          list={list}
+          handleSave={handleSave}
+          pagination={{
+            showSizeChanger: true,
+            total: total,
+            pageSize: searchRef.current.limit,
+            pageSizeOptions: ['20', '50', '100', '200'],
+            onChange: (page: number, pageSize: number) => {
+              searchRef.current = {
+                ...searchRef.current,
+                offset: page,
+                limit: pageSize
+              }
+              postRaceListRun('', '', searchRef.current)
+            }
+          }}
+        />
+      </div>
     </div>
   )
 }

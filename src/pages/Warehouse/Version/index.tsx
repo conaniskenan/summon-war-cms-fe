@@ -2,8 +2,8 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:15
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-04-06 19:28:55
- * @FilePath: /summon-war-cms-fe/src/pages/Version/index.tsx
+ * @LastEditTime: 2024-05-05 16:03:09
+ * @FilePath: \summon-war-cms-fe\src\pages\Warehouse\Version\index.tsx
  */
 import {
   getVersionList,
@@ -151,6 +151,7 @@ const Version: React.FC = () => {
         }}
         onOk={() => {
           form.validateFields().then((values) => {
+            console.log(values);
             postVersionInsertRun(values)
           })
         }}

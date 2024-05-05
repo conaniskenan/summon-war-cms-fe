@@ -18,29 +18,22 @@ export const menuList = [
         path: '/warehouse/currency',
         label: '货币',
         icon: 'DollarCircleOutlined'
-      }
-    ]
-  },
-  {
-    path: '/race',
-    label: '种族管理',
-    icon: 'TeamOutlined'
-  },
-  {
-    path: '/ava',
-    label: '头像管理',
-    icon: 'UserOutlined',
-    children: [
+      }, {
+        path: '/warehouse/race',
+        label: '种族',
+        icon: 'TeamOutlined'
+      },
       {
-        path: '/ava/avatar',
+        path: '/warehouse/avatar',
         label: '头像',
         icon: 'DeploymentUnitOutlined'
       },
       {
-        path: '/ava/frame',
+        path: '/warehouse/frame',
         label: '头像框',
         icon: 'DollarCircleOutlined'
       }
     ]
-  }
+  },
+
 ]

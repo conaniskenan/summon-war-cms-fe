@@ -4,49 +4,6 @@ import request from '@/utils/request'
 
 
   /**
-   ** 接口名称: 获取货币列表
-   ** 请求方式: get
-   ** 接口地址: /warehouse/currency/list
-   ** 接口描述: 获取货币列表
-   ** 请求头:
-      ** X-USER-AUTH: string
-      ** X-CAPTCHA-TICKET: string
-      ** Content-Type: application/json
-   ** 请求参数:
-      ** version_id: number 版本id，如果传入的id是0的话，会返回所有版本下的所有货币
-      
-   ** 响应字段:
-       ** list 当前版本下的货币列表
-
-          ** id: number 货币id
-
-          ** name: string 货币名字
-
-          ** version_id: number 这个货币被创建的版本id
-
-          ** last_version_id: number 这个货币被修改的版本id
-
-          ** release: number 0 未发布，1已发布，2隐藏
-
-          ** default: number 1为正常，2为隐藏
-
-          ** version_name: string 货币被创建时版本的名字
-
-          ** last_version_name: string 货币被修改时版本的名字
-
-   
-  
-   */
-export const getCurrencyList = (params: Api.Paths.GetCurrencyList.Request,config={}) => {
-  return request<Api.Paths.GetCurrencyList.Response>({
-    url: `/warehouse/currency/list`,
-    method: "GET",
-    params,
-    ...config
-  });
-}
-        
-  /**
    ** 接口名称: 修改货币
    ** 请求方式: post
    ** 接口地址: /warehouse/currency/modify
@@ -204,6 +161,51 @@ export const postCurrencyRelease = (params: Api.Paths.PostCurrencyRelease.Reques
 export const postCurrencyDefault = (params: Api.Paths.PostCurrencyDefault.Request,config={}) => {
   return request<Api.Paths.PostCurrencyDefault.Response>({
     url: `/warehouse/currency/modify/default`,
+    method: "POST",
+    data: params,
+    ...config
+  });
+}
+        
+  /**
+   ** 接口名称: 获取货币列表
+   ** 请求方式: post
+   ** 接口地址: /warehouse/currency/list
+   ** 接口描述: 获取货币列表
+   ** 请求头:
+      ** X-USER-AUTH: string
+      ** X-CAPTCHA-TICKET: string
+      ** Content-Type: application/json
+   ** 请求参数:
+      ** searchRequest: {[key: string]: object} 
+   
+   ** 响应字段:
+       ** list 货币列表
+
+          ** id: number 货币id
+
+          ** name: string 货币名称
+
+          ** version_id: number 创建的版本id
+
+          ** last_version_id: number 被修改的版本id
+
+          ** release: number 0未发布，1为已发布，2为隐藏
+
+          ** default: number 0未发布，1为已发布，2为隐藏
+
+          ** version_name: string 创建时的版本名字
+
+          ** last_version_name: string 被修改时的版本名称
+
+   
+      ** searchResponse: {[key: string]: object} undefined
+
+   
+   */
+export const postCurrencyList = (params: Api.Paths.PostCurrencyList.Request,config={}) => {
+  return request<Api.Paths.PostCurrencyList.Response>({
+    url: `/warehouse/currency/list`,
     method: "POST",
     data: params,
     ...config

@@ -1,3 +1,11 @@
+/*
+ * @Author: hypocrisy
+ * @Date: 2024-05-05 16:37:43
+ * @LastEditors: hypocrisy
+ * @LastEditTime: 2024-05-05 17:50:52
+ * @FilePath: \summon-war-cms-fe\src\utils\request.ts
+ */
+
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { notification } from 'antd'
@@ -43,14 +51,6 @@ instance.interceptors.response.use(
       description: err.response ? err.response.data.text : err.message,
       duration: 2
     })
-    // if (err.response?.status === 403) {
-    //   if (code === 65537) {
-    //     errParams.needVertify = true
-    //   }
-    //   if (code === 65538) {
-    //     localStorage.removeItem('SUMMON_WAR_SESSION')
-    //   }
-    // }
     return Promise.reject(errParams)
   }
 )

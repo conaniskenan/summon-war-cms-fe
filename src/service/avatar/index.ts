@@ -5,16 +5,16 @@ import request from '@/utils/request'
 
   /**
    ** 接口名称: 获取头像列表 
-   ** 请求方式: get
+   ** 请求方式: post
    ** 接口地址: /warehouse/avatar/list
    ** 接口描述: 获取头像列表
    ** 请求头:
       ** X-USER-AUTH: string
       ** X-CAPTCHA-TICKET: string
-      ** Content-Type: none
+      ** Content-Type: application/json
    ** 请求参数:
-      ** version_id: number 头像id
-      
+      ** searchRequest: {[key: string]: object} 
+   
    ** 响应字段:
        ** list 头像列表
 
@@ -28,20 +28,22 @@ import request from '@/utils/request'
 
           ** release: number 0未发布，1为已发布，2为隐藏
 
-          ** default: number 1为正常，2为隐藏
+          ** default: number 0未发布，1为已发布，2为隐藏
 
           ** version_name: string 创建时的版本名字
 
           ** last_version_name: string 被修改时的版本名称
 
    
-  
+      ** searchResponse: {[key: string]: object} undefined
+
+   
    */
-export const getAvatarList = (params: Api.Paths.GetAvatarList.Request,config={}) => {
-  return request<Api.Paths.GetAvatarList.Response>({
+export const postAvatarList = (params: Api.Paths.PostAvatarList.Request,config={}) => {
+  return request<Api.Paths.PostAvatarList.Response>({
     url: `/warehouse/avatar/list`,
-    method: "GET",
-    params,
+    method: "POST",
+    data: params,
     ...config
   });
 }

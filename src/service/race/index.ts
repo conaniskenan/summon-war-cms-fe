@@ -4,49 +4,6 @@ import request from '@/utils/request'
 
 
   /**
-   ** 接口名称: 获取种族列表
-   ** 请求方式: get
-   ** 接口地址: /warehouse/race/list
-   ** 接口描述: 获取种族列表
-   ** 请求头:
-      ** X-USER-AUTH: string
-      ** X-CAPTCHA-TICKET: string
-      ** Content-Type: none
-   ** 请求参数:
-      ** version_id: number 版本id
-      
-   ** 响应字段:
-       ** list 种族列表
-
-          ** id: number 种族id
-
-          ** name: string 种族名称
-
-          ** version_id: number 创建的版本id
-
-          ** last_version_id: number 被修改的版本id
-
-          ** release: number 0未发布，1为已发布，2为隐藏
-
-          ** default: number 1为正常，2为隐藏
-
-          ** version_name: string 创建时的版本名字
-
-          ** last_version_name: string 被修改时的版本名称
-
-   
-  
-   */
-export const getRaceList = (params: Api.Paths.GetRaceList.Request,config={}) => {
-  return request<Api.Paths.GetRaceList.Response>({
-    url: `/warehouse/race/list`,
-    method: "GET",
-    params,
-    ...config
-  });
-}
-        
-  /**
    ** 接口名称: 添加种族
    ** 请求方式: post
    ** 接口地址: /warehouse/race/insert
@@ -204,6 +161,51 @@ export const postRaceDefault = (params: Api.Paths.PostRaceDefault.Request,config
 export const postRaceRelease = (params: Api.Paths.PostRaceRelease.Request,config={}) => {
   return request<Api.Paths.PostRaceRelease.Response>({
     url: `/warehouse/race/modify/release`,
+    method: "POST",
+    data: params,
+    ...config
+  });
+}
+        
+  /**
+   ** 接口名称: 获取种族列表
+   ** 请求方式: post
+   ** 接口地址: /warehouse/race/list
+   ** 接口描述: 获取种族列表
+   ** 请求头:
+      ** X-USER-AUTH: string
+      ** X-CAPTCHA-TICKET: string
+      ** Content-Type: application/json
+   ** 请求参数:
+      ** searchRequest: {[key: string]: object} 
+   
+   ** 响应字段:
+       ** list 种族列表
+
+          ** id: number 种族id
+
+          ** name: string 种族名称
+
+          ** version_id: number 创建的版本id
+
+          ** last_version_id: number 被修改的版本id
+
+          ** release: number 0未发布，1为已发布，2为隐藏
+
+          ** default: number 0未发布，1为已发布，2为隐藏
+
+          ** version_name: string 创建时的版本名字
+
+          ** last_version_name: string 被修改时的版本名称
+
+   
+      ** searchResponse: {[key: string]: object} undefined
+
+   
+   */
+export const postRaceList = (params: Api.Paths.PostRaceList.Request,config={}) => {
+  return request<Api.Paths.PostRaceList.Response>({
+    url: `/warehouse/race/list`,
     method: "POST",
     data: params,
     ...config

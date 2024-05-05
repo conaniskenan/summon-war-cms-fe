@@ -2,63 +2,98 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:45
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-04-06 21:09:58
- * @FilePath: /summon-war-cms-fe/src/pages/Ava/Avatar/index.tsx
+ * @LastEditTime: 2024-05-05 18:58:58
+ * @FilePath: \summon-war-cms-fe\src\pages\Warehouse\Avatar\index.tsx
  */
-import {
-  getAvatarList,
-  postAvatarModify,
-  postAvatarDelete,
-  postAvatarInsert,
-  postAvatarDefault,
-  postAvatarRelease
-} from '@/service/avatar'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRequest } from 'ahooks'
 import EditTable from '@/components/EditTable'
 import { Button, Form, Input, Modal, Radio, Select, notification } from 'antd'
-
+import { Service } from '@/api'
+//通过PostAvatarList方法获取 返回值是一个promise 拿到promise的返回值
+type AvatarListProps = ReturnType<
+  typeof Service.postWarehouseAvatarList
+> extends Promise<infer T>
+  ? T
+  : never
+type VersionListProps = ReturnType<
+  typeof Service.getWarehouseVersionList
+> extends Promise<infer T>
+  ? T
+  : never
 const Avatar: React.FC = () => {
+  const [list, setList] = useState<AvatarListProps['list']>([])
   const [id, setId] = useState<number>(0)
-  const [list, setList] = useState<Api.Paths.GetAvatarList.Response['list']>([])
   const [visible, setVisible] = useState(false)
   const [releaseVisible, setReleaseVisible] = useState(false)
   const [defaultVisible, setDefaultVisible] = useState(false)
-
   const [form] = Form.useForm()
+  const [searchFrom] = Form.useForm()
   const [releaseForm] = Form.useForm()
   const [defaultForm] = Form.useForm()
   const [refresh, setRefresh] = useState(0)
-  const { run: getAvatarListRun } = useRequest(getAvatarList, {
-    manual: true,
-    onSuccess: (res) => {
-      setList(res.list)
+  const [total, setTotal] = useState(0)
+  const [versionList, setVersionList] = useState<VersionListProps['list']>([])
+  const searchRef = useRef({
+    offset: 0,
+    limit: 50,
+    filter: {
+      name: '',
+      version_id: 0,
+      default: -1,
+      release: -1
     }
   })
-  const { run: postAvatarModifyRun } = useRequest(postAvatarModify, {
-    manual: true,
-    onSuccess: () => {
-      setRefresh((prev) => prev + 1)
-      notification.success({
-        message: '',
-        description: '头像名称修改成功',
-        duration: 2
-      })
+  const { run: getWarehouseVersionListRun } = useRequest(
+    Service.getWarehouseVersionList,
+    {
+      manual: true,
+      onSuccess: (res) => {
+        setVersionList(res.list)
+      }
     }
-  })
-  const { run: postAvatarDeleteRun } = useRequest(postAvatarDelete, {
-    manual: true,
-    onSuccess: () => {
-      setRefresh((prev) => prev + 1)
-      notification.success({
-        message: '',
-        description: '头像删除成功',
-        duration: 2
-      })
+  )
+  const { run: postAvatarListRun } = useRequest(
+    Service.postWarehouseAvatarList,
+    {
+      manual: true,
+      debounceWait: 500,
+      onSuccess: (res) => {
+        setList(res.list)
+        setTotal(res.total)
+      }
     }
-  })
+  )
+  const { run: postAvatarModifyRun } = useRequest(
+    Service.postWarehouseAvatarModify,
+    {
+      manual: true,
+      onSuccess: () => {
+        setRefresh((prev) => prev + 1)
+        notification.success({
+          message: '',
+          description: '头像名称修改成功',
+          duration: 2
+        })
+      }
+    }
+  )
+  const { run: postAvatarDeleteRun } = useRequest(
+    Service.postWarehouseAvatarDelete,
+    {
+      manual: true,
+      onSuccess: () => {
+        setRefresh((prev) => prev + 1)
+        notification.success({
+          message: '',
+          description: '头像删除成功',
+          duration: 2
+        })
+      }
+    }
+  )
   const { run: postAvatarInsertRun, loading: postAvatarInsertLoading } =
-    useRequest(postAvatarInsert, {
+    useRequest(Service.postWarehouseAvatarInsert, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -72,7 +107,7 @@ const Avatar: React.FC = () => {
       }
     })
   const { run: postAvatarDefaultRun, loading: postAvatarDefaultLoading } =
-    useRequest(postAvatarDefault, {
+    useRequest(Service.postWarehouseAvatarModifyDefault, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -85,7 +120,7 @@ const Avatar: React.FC = () => {
       }
     })
   const { run: postAvatarReleaseRun, loading: postAvatarReleaseLoading } =
-    useRequest(postAvatarRelease, {
+    useRequest(Service.postWarehouseAvatarModifyRelease, {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
@@ -97,10 +132,7 @@ const Avatar: React.FC = () => {
         })
       }
     })
-  const handleSave = (
-    row: Api.Paths.GetAvatarList.Response['list'][0],
-    preRow: Api.Paths.GetAvatarList.Response['list'][0]
-  ) => {
+  const handleSave = (row: any, preRow: any) => {
     if (row.name === preRow.name) {
       return
     }
@@ -115,7 +147,7 @@ const Avatar: React.FC = () => {
         return item
       })
     })
-    postAvatarModifyRun({
+    postAvatarModifyRun('', '', {
       id: row.id,
       name: row.name
     })
@@ -166,10 +198,7 @@ const Avatar: React.FC = () => {
       dataIndex: 'operation',
       align: 'center',
       width: 400,
-      render: (
-        _text: string,
-        record: Api.Paths.GetAvatarList.Response['list'][0]
-      ) => {
+      render: (_text: string, record: any) => {
         return (
           <div>
             <Button
@@ -198,7 +227,7 @@ const Avatar: React.FC = () => {
               danger
               type="link"
               onClick={() => {
-                postAvatarDeleteRun({
+                postAvatarDeleteRun('', '', {
                   id: record.id
                 })
               }}
@@ -213,11 +242,12 @@ const Avatar: React.FC = () => {
     }
   ]
   useEffect(() => {
-    getAvatarListRun({ version_id: 0 })
+    getWarehouseVersionListRun('', '')
+    postAvatarListRun('', '', searchRef.current)
   }, [refresh])
 
   return (
-    <div>
+    <div className="relative">
       <Modal
         destroyOnClose={true}
         open={visible}
@@ -227,7 +257,7 @@ const Avatar: React.FC = () => {
         }}
         onOk={() => {
           form.validateFields().then((values) => {
-            postAvatarInsertRun(values)
+            postAvatarInsertRun('', '', values)
           })
         }}
         confirmLoading={postAvatarInsertLoading}
@@ -253,14 +283,8 @@ const Avatar: React.FC = () => {
           >
             <Input placeholder="输入头像名称" />
           </Form.Item>
-          <Form.Item
-            label="默认状态"
-            name="default"
-            required
-            rules={[{ required: true, message: '请输入默认状态' }]}
-            initialValue={1}
-          >
-            <Radio.Group defaultValue={1}>
+          <Form.Item label="默认状态" name="default" required initialValue={1}>
+            <Radio.Group>
               <Radio value={1}>正常</Radio>
               <Radio value={2}>隐藏</Radio>
             </Radio.Group>
@@ -276,7 +300,7 @@ const Avatar: React.FC = () => {
         }}
         onOk={() => {
           releaseForm.validateFields().then((values) => {
-            postAvatarReleaseRun({ ...values, id })
+            postAvatarReleaseRun('', '', { ...values, id })
           })
         }}
         confirmLoading={postAvatarReleaseLoading}
@@ -287,6 +311,7 @@ const Avatar: React.FC = () => {
         title="修改发布状态"
       >
         <Form
+          name="releaseForm"
           form={releaseForm}
           style={{
             marginTop: '50px',
@@ -297,7 +322,7 @@ const Avatar: React.FC = () => {
         >
           <Form.Item label="发布状态" name="release" required initialValue={1}>
             <Select>
-              {/* <Select.Option value={0}>未发布</Select.Option> */}
+              <Select.Option value={0}>未发布</Select.Option>
               <Select.Option value={1}>已发布</Select.Option>
               <Select.Option value={2}>隐藏</Select.Option>
             </Select>
@@ -313,7 +338,7 @@ const Avatar: React.FC = () => {
         }}
         onOk={() => {
           defaultForm.validateFields().then((values) => {
-            postAvatarDefaultRun({ ...values, id })
+            postAvatarDefaultRun('', '', { ...values, id })
           })
         }}
         confirmLoading={postAvatarDefaultLoading}
@@ -324,6 +349,7 @@ const Avatar: React.FC = () => {
         title="修改默认状态"
       >
         <Form
+          name="defaultForm"
           form={defaultForm}
           style={{
             marginTop: '50px',
@@ -341,16 +367,97 @@ const Avatar: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <Button
-        type="primary"
-        className="mb-3 mr-4"
-        onClick={() => {
-          setVisible(true)
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
         }}
       >
-        添加头像
-      </Button>
-      <EditTable defaultColumns={columns} list={list} handleSave={handleSave} />
+        <Form
+          layout="inline"
+          name="searchFrom"
+          form={searchFrom}
+          labelCol={{ flex: 100 }}
+          wrapperCol={{ flex: 300 }}
+          style={{ marginBottom: '20px', width: '100%' }}
+          onValuesChange={() => {
+            searchFrom.validateFields().then((values) => {
+              searchRef.current = {
+                ...searchRef.current,
+                filter: {
+                  ...searchRef.current.filter,
+                  ...values
+                }
+              }
+              postAvatarListRun('', '', searchRef.current)
+            })
+          }}
+        >
+          <Form.Item label="头像名称" name="name" initialValue={''}>
+            <Input placeholder="输入头像名称" />
+          </Form.Item>
+          <Form.Item label="被创建版本" name="version_id" initialValue={0}>
+            <Select style={{ minWidth: 100 }} placeholder="选择版本">
+              <Select.Option value={0}>全部</Select.Option>
+              {versionList.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="默认状态" name="default" initialValue={-1}>
+            <Select style={{ minWidth: 100 }}>
+              <Select.Option value={-1}>全部</Select.Option>
+              <Select.Option value={1}>正常</Select.Option>
+              <Select.Option value={2}>隐藏</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="发布状态" name="release" initialValue={-1}>
+            <Select style={{ minWidth: 100 }}>
+              <Select.Option value={-1}>全部</Select.Option>
+              <Select.Option value={0}>未发布</Select.Option>
+              <Select.Option value={1}>已发布</Select.Option>
+              <Select.Option value={2}>隐藏</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+        <Button
+          type="primary"
+          className="mb-3 mr-4"
+          onClick={() => {
+            setVisible(true)
+          }}
+        >
+          添加头像
+        </Button>
+      </div>
+      <div
+        style={{
+          height: 'calc(100vh - 240px)',
+          overflow: 'auto'
+        }}
+      >
+        <EditTable
+          defaultColumns={columns}
+          list={list}
+          handleSave={handleSave}
+          pagination={{
+            showSizeChanger: true,
+            total: total,
+            pageSize: searchRef.current.limit,
+            pageSizeOptions: ['20', '50', '100', '200'],
+            onChange: (page: number, pageSize: number) => {
+              searchRef.current = {
+                ...searchRef.current,
+                offset: page,
+                limit: pageSize
+              }
+              postAvatarListRun('', '', searchRef.current)
+            }
+          }}
+        />
+      </div>
     </div>
   )
 }

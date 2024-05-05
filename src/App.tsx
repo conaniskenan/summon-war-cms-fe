@@ -22,7 +22,7 @@ const App = () => {
       <Layout>
         <Header className="header">
           <img src={logoPng} alt="加载失败" className="logo" />
-          <i className="logo_title">召唤战争CMS</i>
+          <i className="logo_title">万灵崛起CMS</i>
           <div style={{ marginLeft: 'auto' }} className="flex">
             <img className="avatar" src={defaultPng} alt="" />
             <span

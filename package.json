@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.5",
     "eslint": "^8.57.0",
+    "openapi-typescript-codegen": "^0.29.0",
     "path": "^0.12.7",
     "require": "^2.4.20",
     "tslint": "^6.1.3"

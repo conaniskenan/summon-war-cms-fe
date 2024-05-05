@@ -2,17 +2,17 @@
  * @Author: hypocrisy
  * @Date: 2024-03-22 15:05:45
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-05-05 18:57:01
- * @FilePath: \summon-war-cms-fe\src\pages\Warehouse\Currency\index.tsx
+ * @LastEditTime: 2024-05-05 18:55:12
+ * @FilePath: \summon-war-cms-fe\src\pages\Warehouse\Frame\index.tsx
  */
 import { useEffect, useRef, useState } from 'react'
 import { useRequest } from 'ahooks'
 import EditTable from '@/components/EditTable'
 import { Button, Form, Input, Modal, Radio, Select, notification } from 'antd'
 import { Service } from '@/api'
-//通过PostCurrencyList方法获取 返回值是一个promise 拿到promise的返回值
-type CurrencyListProps = ReturnType<
-  typeof Service.postWarehouseCurrencyList
+//通过PostAvatarFrameList方法获取 返回值是一个promise 拿到promise的返回值
+type AvatarFrameListProps = ReturnType<
+  typeof Service.postWarehouseAvatarFrameList
 > extends Promise<infer T>
   ? T
   : never
@@ -21,8 +21,8 @@ type VersionListProps = ReturnType<
 > extends Promise<infer T>
   ? T
   : never
-const Currency: React.FC = () => {
-  const [list, setList] = useState<CurrencyListProps['list']>([])
+const AvatarFrame: React.FC = () => {
+  const [list, setList] = useState<AvatarFrameListProps['list']>([])
   const [id, setId] = useState<number>(0)
   const [visible, setVisible] = useState(false)
   const [releaseVisible, setReleaseVisible] = useState(false)
@@ -53,8 +53,8 @@ const Currency: React.FC = () => {
       }
     }
   )
-  const { run: postCurrencyListRun } = useRequest(
-    Service.postWarehouseCurrencyList,
+  const { run: postAvatarFrameListRun } = useRequest(
+    Service.postWarehouseAvatarFrameList,
     {
       manual: true,
       debounceWait: 500,
@@ -64,74 +64,80 @@ const Currency: React.FC = () => {
       }
     }
   )
-  const { run: postCurrencyModifyRun } = useRequest(
-    Service.postWarehouseCurrencyModify,
+  const { run: postAvatarFrameModifyRun } = useRequest(
+    Service.postWarehouseAvatarFrameModify,
     {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
         notification.success({
           message: '',
-          description: '货币名称修改成功',
+          description: '头像框名称修改成功',
           duration: 2
         })
       }
     }
   )
-  const { run: postCurrencyDeleteRun } = useRequest(
-    Service.postWarehouseCurrencyDelete,
+  const { run: postAvatarFrameDeleteRun } = useRequest(
+    Service.postWarehouseAvatarFrameDelete,
     {
       manual: true,
       onSuccess: () => {
         setRefresh((prev) => prev + 1)
         notification.success({
           message: '',
-          description: '货币删除成功',
+          description: '头像框删除成功',
           duration: 2
         })
       }
     }
   )
-  const { run: postCurrencyInsertRun, loading: postCurrencyInsertLoading } =
-    useRequest(Service.postWarehouseCurrencyInsert, {
-      manual: true,
-      onSuccess: () => {
-        setRefresh((prev) => prev + 1)
-        setVisible(false)
-        notification.success({
-          message: '',
-          description: '货币添加成功',
-          duration: 2
-        })
-        form.resetFields()
-      }
-    })
-  const { run: postCurrencyDefaultRun, loading: postCurrencyDefaultLoading } =
-    useRequest(Service.postWarehouseCurrencyModifyDefault, {
-      manual: true,
-      onSuccess: () => {
-        setRefresh((prev) => prev + 1)
-        setDefaultVisible(false)
-        notification.success({
-          message: '',
-          description: '货币默认状态修改成功',
-          duration: 2
-        })
-      }
-    })
-  const { run: postCurrencyReleaseRun, loading: postCurrencyReleaseLoading } =
-    useRequest(Service.postWarehouseCurrencyModifyRelease, {
-      manual: true,
-      onSuccess: () => {
-        setRefresh((prev) => prev + 1)
-        setReleaseVisible(false)
-        notification.success({
-          message: '',
-          description: '货币发布状态修改成功',
-          duration: 2
-        })
-      }
-    })
+  const {
+    run: postAvatarFrameInsertRun,
+    loading: postAvatarFrameInsertLoading
+  } = useRequest(Service.postWarehouseAvatarFrameInsert, {
+    manual: true,
+    onSuccess: () => {
+      setRefresh((prev) => prev + 1)
+      setVisible(false)
+      notification.success({
+        message: '',
+        description: '头像框添加成功',
+        duration: 2
+      })
+      form.resetFields()
+    }
+  })
+  const {
+    run: postAvatarFrameDefaultRun,
+    loading: postAvatarFrameDefaultLoading
+  } = useRequest(Service.postWarehouseAvatarFrameModifyDefault, {
+    manual: true,
+    onSuccess: () => {
+      setRefresh((prev) => prev + 1)
+      setDefaultVisible(false)
+      notification.success({
+        message: '',
+        description: '头像框默认状态修改成功',
+        duration: 2
+      })
+    }
+  })
+  const {
+    run: postAvatarFrameReleaseRun,
+    loading: postAvatarFrameReleaseLoading
+  } = useRequest(Service.postWarehouseAvatarFrameModifyRelease, {
+    manual: true,
+    onSuccess: () => {
+      setRefresh((prev) => prev + 1)
+      setReleaseVisible(false)
+      notification.success({
+        message: '',
+        description: '头像框发布状态修改成功',
+        duration: 2
+      })
+    }
+  })
   const handleSave = (row: any, preRow: any) => {
     if (row.name === preRow.name) {
       return
@@ -147,14 +153,14 @@ const Currency: React.FC = () => {
         return item
       })
     })
-    postCurrencyModifyRun('', '', {
+    postAvatarFrameModifyRun('', '', {
       id: row.id,
       name: row.name
     })
   }
   const columns = [
     {
-      title: '货币名称',
+      title: '头像框名称',
       dataIndex: 'name',
       editable: true
     },
@@ -227,7 +233,7 @@ const Currency: React.FC = () => {
               danger
               type="link"
               onClick={() => {
-                postCurrencyDeleteRun('', '', {
+                postAvatarFrameDeleteRun('', '', {
                   id: record.id
                 })
               }}
@@ -243,7 +249,7 @@ const Currency: React.FC = () => {
   ]
   useEffect(() => {
     getWarehouseVersionListRun('', '')
-    postCurrencyListRun('', '', searchRef.current)
+    postAvatarFrameListRun('', '', searchRef.current)
   }, [refresh])
 
   return (
@@ -257,15 +263,15 @@ const Currency: React.FC = () => {
         }}
         onOk={() => {
           form.validateFields().then((values) => {
-            postCurrencyInsertRun('', '', values)
+            postAvatarFrameInsertRun('', '', values)
           })
         }}
-        confirmLoading={postCurrencyInsertLoading}
+        confirmLoading={postAvatarFrameInsertLoading}
         style={{
           padding: '20px'
         }}
         width={600}
-        title="添加货币"
+        title="添加头像框"
       >
         <Form
           form={form}
@@ -276,12 +282,12 @@ const Currency: React.FC = () => {
           wrapperCol={{ span: 14 }}
         >
           <Form.Item
-            label="货币名称"
+            label="头像框名称"
             name="name"
             required
-            rules={[{ required: true, message: '请输入货币名称' }]}
+            rules={[{ required: true, message: '请输入头像框名称' }]}
           >
-            <Input placeholder="输入货币名称" />
+            <Input placeholder="输入头像框名称" />
           </Form.Item>
           <Form.Item label="默认状态" name="default" required initialValue={1}>
             <Radio.Group>
@@ -300,10 +306,10 @@ const Currency: React.FC = () => {
         }}
         onOk={() => {
           releaseForm.validateFields().then((values) => {
-            postCurrencyReleaseRun('', '', { ...values, id })
+            postAvatarFrameReleaseRun('', '', { ...values, id })
           })
         }}
-        confirmLoading={postCurrencyReleaseLoading}
+        confirmLoading={postAvatarFrameReleaseLoading}
         style={{
           padding: '20px'
         }}
@@ -338,10 +344,10 @@ const Currency: React.FC = () => {
         }}
         onOk={() => {
           defaultForm.validateFields().then((values) => {
-            postCurrencyDefaultRun('', '', { ...values, id })
+            postAvatarFrameDefaultRun('', '', { ...values, id })
           })
         }}
-        confirmLoading={postCurrencyDefaultLoading}
+        confirmLoading={postAvatarFrameDefaultLoading}
         style={{
           padding: '20px'
         }}
@@ -389,12 +395,12 @@ const Currency: React.FC = () => {
                   ...values
                 }
               }
-              postCurrencyListRun('', '', searchRef.current)
+              postAvatarFrameListRun('', '', searchRef.current)
             })
           }}
         >
-          <Form.Item label="货币名称" name="name" initialValue={''}>
-            <Input placeholder="输入货币名称" />
+          <Form.Item label="头像框名称" name="name" initialValue={''}>
+            <Input placeholder="输入头像框名称" />
           </Form.Item>
           <Form.Item label="被创建版本" name="version_id" initialValue={0}>
             <Select style={{ minWidth: 100 }} placeholder="选择版本">
@@ -429,7 +435,7 @@ const Currency: React.FC = () => {
             setVisible(true)
           }}
         >
-          添加货币
+          添加头像框
         </Button>
       </div>
       <div
@@ -453,7 +459,7 @@ const Currency: React.FC = () => {
                 offset: page,
                 limit: pageSize
               }
-              postCurrencyListRun('', '', searchRef.current)
+              postAvatarFrameListRun('', '', searchRef.current)
             }
           }}
         />
@@ -461,4 +467,4 @@ const Currency: React.FC = () => {
     </div>
   )
 }
-export default Currency
+export default AvatarFrame

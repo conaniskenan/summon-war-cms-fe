@@ -4,49 +4,6 @@ import request from '@/utils/request'
 
 
   /**
-   ** 接口名称: 获取头像框列表
-   ** 请求方式: get
-   ** 接口地址: /warehouse/avatar_frame/list
-   ** 接口描述: 获取头像框列表
-   ** 请求头:
-      ** X-USER-AUTH: string
-      ** X-CAPTCHA-TICKET: string
-      ** Content-Type: none
-   ** 请求参数:
-      ** version_id: number 头像框id
-      
-   ** 响应字段:
-       ** list 头像框列表
-
-          ** id: number 头像框id
-
-          ** name: string 头像框名称
-
-          ** version_id: number 创建的版本id
-
-          ** last_version_id: number 被修改的版本id
-
-          ** release: number 0未发布，1为已发布，2为隐藏
-
-          ** default: number 1为正常，2为隐藏
-
-          ** version_name: string 创建时的版本名字
-
-          ** last_version_name: string 被修改时的版本名称
-
-   
-  
-   */
-export const getFrameList = (params: Api.Paths.GetFrameList.Request,config={}) => {
-  return request<Api.Paths.GetFrameList.Response>({
-    url: `/warehouse/avatar_frame/list`,
-    method: "GET",
-    params,
-    ...config
-  });
-}
-        
-  /**
    ** 接口名称: 添加头像框
    ** 请求方式: post
    ** 接口地址: /warehouse/avatar_frame/insert
@@ -204,6 +161,51 @@ export const postFrameDefault = (params: Api.Paths.PostFrameDefault.Request,conf
 export const postFrameRelease = (params: Api.Paths.PostFrameRelease.Request,config={}) => {
   return request<Api.Paths.PostFrameRelease.Response>({
     url: `/warehouse/avatar_frame/modify/release`,
+    method: "POST",
+    data: params,
+    ...config
+  });
+}
+        
+  /**
+   ** 接口名称: 获取头像框列表 
+   ** 请求方式: post
+   ** 接口地址: /warehouse/avatar_frame/list
+   ** 接口描述: 获取头像框列表
+   ** 请求头:
+      ** X-USER-AUTH: string
+      ** X-CAPTCHA-TICKET: string
+      ** Content-Type: application/json
+   ** 请求参数:
+      ** searchRequest: {[key: string]: object} 
+   
+   ** 响应字段:
+       ** list 头像框列表
+
+          ** id: number 头像id
+
+          ** name: string 头像名称
+
+          ** version_id: number 创建的版本id
+
+          ** last_version_id: number 被修改的版本id
+
+          ** release: number 0未发布，1为已发布，2为隐藏
+
+          ** default: number 0未发布，1为已发布，2为隐藏
+
+          ** version_name: string 创建时的版本名字
+
+          ** last_version_name: string 被修改时的版本名称
+
+   
+      ** searchResponse: {[key: string]: object} undefined
+
+   
+   */
+export const postFrameList = (params: Api.Paths.PostFrameList.Request,config={}) => {
+  return request<Api.Paths.PostFrameList.Response>({
+    url: `/warehouse/avatar_frame/list`,
     method: "POST",
     data: params,
     ...config

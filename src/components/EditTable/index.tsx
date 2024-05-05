@@ -102,6 +102,7 @@ interface EditTableProps {
   defaultColumns: any[]
   list: any[]
   handleSave: (record: any, preRecord: any) => void
+  [key: string]: any
 }
 
 const EditTable: React.FC<EditTableProps> = (props) => {
@@ -140,6 +141,7 @@ const EditTable: React.FC<EditTableProps> = (props) => {
         components={components}
         rowClassName={() => 'editable-row'}
         bordered
+        {...props}
       />
     </div>
   )

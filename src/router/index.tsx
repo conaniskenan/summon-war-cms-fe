@@ -3,9 +3,9 @@ const Home = React.lazy(() => import('@/pages/Home'))
 const NotFound = React.lazy(() => import('@/pages/404'))
 const Version = React.lazy(() => import('@/pages/Warehouse/Version'))
 const Currency = React.lazy(() => import('@/pages/Warehouse/Currency'))
-const Race = React.lazy(() => import('@/pages/Race'))
-const Avatar = React.lazy(() => import('@/pages/Ava/Avatar'))
-const Frame = React.lazy(() => import('@/pages/Ava/Frame'))
+const Race = React.lazy(() => import('@/pages/Warehouse/Race'))
+const Avatar = React.lazy(() => import('@/pages/Warehouse/Avatar'))
+const Frame = React.lazy(() => import('@/pages/Warehouse/Frame'))
 const routes = [
   {
     path: '/',
@@ -21,22 +21,17 @@ const routes = [
       {
         path: '/warehouse/currency',
         element: <Currency />
-      }
-    ]
-  },
-  {
-    path: '/race',
-    element: <Race />
-  },
-  {
-    path: '/ava',
-    children: [
+      },
       {
-        path: '/ava/avatar',
+        path: '/warehouse/race',
+        element: <Race />
+      },
+      {
+        path: '/warehouse/avatar',
         element: <Avatar />
       },
       {
-        path: '/ava/frame',
+        path: '/warehouse/frame',
         element: <Frame />
       }
     ]

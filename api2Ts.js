@@ -2,8 +2,8 @@
  * @Author: hypocrisy
  * @Date: 2024-03-21 16:58:04
  * @LastEditors: hypocrisy
- * @LastEditTime: 2024-04-04 17:46:58
- * @FilePath: /summon-war-cms-fe/api2Ts.js
+ * @LastEditTime: 2024-04-14 17:44:04
+ * @FilePath: \summon-war-cms-fe\api2Ts.js
  */
 import axios from 'axios'
 import https from 'https'
