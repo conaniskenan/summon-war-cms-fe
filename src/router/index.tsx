@@ -6,6 +6,7 @@ const Currency = React.lazy(() => import('@/pages/Warehouse/Currency'))
 const Race = React.lazy(() => import('@/pages/Warehouse/Race'))
 const Avatar = React.lazy(() => import('@/pages/Warehouse/Avatar'))
 const Frame = React.lazy(() => import('@/pages/Warehouse/Frame'))
+const BaseSkill = React.lazy(() => import('@/pages/Warehouse/Skill/BaseSkill'))
 const routes = [
   {
     path: '/',
@@ -33,6 +34,15 @@ const routes = [
       {
         path: '/warehouse/frame',
         element: <Frame />
+      },
+      {
+        path: '/warehouse/skill',
+        children: [
+          {
+            path: '/warehouse/skill/base',
+            element: <BaseSkill />
+          }
+        ]
       }
     ]
   },

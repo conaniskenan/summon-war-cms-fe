@@ -1,3 +1,5 @@
+import path from "path";
+
 export const menuList = [
   {
     path: '/',
@@ -32,6 +34,18 @@ export const menuList = [
         path: '/warehouse/frame',
         label: '头像框',
         icon: 'DollarCircleOutlined'
+      },
+      {
+        path: '/warehouse/skill',
+        label: '技能',
+        icon: 'TeamOutlined',
+        children: [
+          {
+            path: '/warehouse/skill/base',
+            label: '底层技能',
+            icon: 'DeploymentUnitOutlined'
+          }
+        ]
       }
     ]
   },
